@@ -1,17 +1,14 @@
 package org.jvnet.hyperjaxb3.ejb.strategy.naming.impl;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.sun.codemodel.JClass;
+import com.sun.codemodel.JType;
+import com.sun.tools.xjc.model.*;
+import com.sun.tools.xjc.model.nav.NType;
+import com.sun.tools.xjc.outline.ClassOutline;
+import com.sun.tools.xjc.outline.FieldOutline;
+import com.sun.tools.xjc.outline.Outline;
+import com.sun.tools.xjc.outline.PackageOutline;
+import com.sun.xml.bind.api.impl.NameConverter;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,20 +19,10 @@ import org.jvnet.jaxb2_commons.util.CodeModelUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.sun.codemodel.JClass;
-import com.sun.codemodel.JType;
-import com.sun.tools.xjc.model.CClass;
-import com.sun.tools.xjc.model.CClassInfo;
-import com.sun.tools.xjc.model.CClassRef;
-import com.sun.tools.xjc.model.CPropertyInfo;
-import com.sun.tools.xjc.model.CTypeInfo;
-import com.sun.tools.xjc.model.nav.NType;
-import  com.sun.tools.xjc.model.Aspect;
-import com.sun.tools.xjc.outline.ClassOutline;
-import com.sun.tools.xjc.outline.FieldOutline;
-import com.sun.tools.xjc.outline.Outline;
-import com.sun.tools.xjc.outline.PackageOutline;
-import com.sun.xml.bind.api.impl.NameConverter;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DefaultNaming implements Naming, InitializingBean {
 
@@ -54,7 +41,14 @@ public class DefaultNaming implements Naming, InitializingBean {
 
 	protected Log logger = LogFactory.getLog(Naming.class);
 
-	private int maxIdentifierLength = 30;
+//	private int maxIdentifierLength = 30;
+	private int maxIdentifierLength = 120;
+	// TODO: 22.06.2020
+	// Oracle - > In Oracle 12.2 and above the maximum object name length is 128 bytes.
+	// In Oracle 12.1 and below the maximum object name length is 30 bytes
+	// In PostgreSQL, identifiers — table names, column names, constraint names, etc. — are limited to a maximum length of 63 bytes.
+	// SQL maximum column name length limitation is 128 characters.
+
 
 	public int getMaxIdentifierLength() {
 		return maxIdentifierLength;
@@ -100,7 +94,10 @@ public class DefaultNaming implements Naming, InitializingBean {
 		}
 	}
 
-	public String getName(Mapping context, final String draftName) {
+	// исходная версия - имзеняем
+	//	public String getName(Mapping context, final String draftName) {
+
+	public String getNameWithUnderscoreAndLengthLimit(Mapping context, final String draftName) {
 
 		Validate.notNull(draftName, "Name must not be null.");
 		// final String name = draftName.replace('$', '_').toUpperCase();
@@ -137,6 +134,27 @@ public class DefaultNaming implements Naming, InitializingBean {
 		}
 
 	}
+
+
+	//  CustomSimpleNoUnderscoreNaming
+	public String getName(Mapping context, final String draftName) {
+
+		logger.trace(" T Naming for draftName="+draftName);
+		logger.debug(" D Naming for draftName="+draftName);
+		System.out.println(" sout Naming for draftName="+draftName);
+
+
+		String name = getNameWithUnderscoreAndLengthLimit(context, draftName);
+		logger.trace(" T getNameWithUnderscoreAndLengthLimit return="+name);
+		System.out.println(" sout getNameWithUnderscoreAndLengthLimit return="+name);
+		if (name.startsWith("_")){
+			return "_" + name.replace("_", "");
+		} else {
+			return name.replace("_", "");
+		}
+	}
+
+
 
 	public String getColumn$Name(Mapping context, FieldOutline fieldOutline) {
 

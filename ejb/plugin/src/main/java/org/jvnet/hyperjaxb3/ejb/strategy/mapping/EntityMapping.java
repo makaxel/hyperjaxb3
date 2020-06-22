@@ -1,38 +1,66 @@
 package org.jvnet.hyperjaxb3.ejb.strategy.mapping;
 
-import javax.persistence.InheritanceType;
-
-import org.jvnet.hyperjaxb3.ejb.schemas.customizations.Customizations;
-import org.jvnet.jaxb2_commons.util.CustomizationUtils;
-
 import com.sun.java.xml.ns.persistence.orm.Attributes;
 import com.sun.java.xml.ns.persistence.orm.Entity;
 import com.sun.java.xml.ns.persistence.orm.Inheritance;
 import com.sun.java.xml.ns.persistence.orm.Table;
 import com.sun.tools.xjc.Options;
 import com.sun.tools.xjc.outline.ClassOutline;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.jvnet.hyperjaxb3.ejb.schemas.customizations.Customizations;
+import org.jvnet.jaxb2_commons.util.CustomizationUtils;
+
+import javax.persistence.InheritanceType;
 
 public class EntityMapping implements ClassOutlineMapping<Entity> {
 
-	// private static Log logger = LogFactory.getLog(EntityMapping.class);
+	 private static Log logger = LogFactory.getLog(EntityMapping.class);
 
 	public Entity process(Mapping context, ClassOutline classOutline,
 			Options options) {
+
+		logger.debug("in EntityMapping.process");
+
 		final Entity entity = context.getCustomizing().getEntity(classOutline);
+		logger.debug(" == got entity = " + entity.getClazz());
+
 		createEntity(context, classOutline, entity);
 		return entity;
 	}
 
 	public void createEntity(Mapping context, ClassOutline classOutline,
 			final Entity entity) {
+
+		logger.debug("in EntityMapping.createEntity");
+
+
+		logger.debug("1. createEntity$Name");
 		createEntity$Name(context, classOutline, entity);
+		logger.debug("1. got createEntity$Name = " + entity.getName());
+
+		if (entity.getName().equalsIgnoreCase("Document")){
+			logger.debug("   skip Document");
+			return;
+		}
+
+
+
+		logger.debug("2. createEntity$Class");
 		createEntity$Class(context, classOutline, entity);
+		logger.debug("2. got createEntity$Class = " + entity.getClazz());
 
+		logger.debug("3. createEntity$Inheritance");
 		createEntity$Inheritance(context, classOutline, entity);
+		logger.debug("3. got createEntity$Inheritance = " + entity.getInheritance());
 
+		logger.debug("4. createEntity$Table");
 		createEntity$Table(context, classOutline, entity);
+		logger.debug("4. got createEntity$Table = " + entity.getTable().getName());
 
+		logger.debug("5. createEntity$Attributes");
 		createEntity$Attributes(context, classOutline, entity);
+		logger.debug("5. got createEntity$Attributes = " + entity.getAttributes() );
 	}
 
 	public void createEntity$Name(Mapping context, ClassOutline classOutline,

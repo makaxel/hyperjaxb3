@@ -7,6 +7,10 @@ public class CustomSimpleNoUnderscoreNaming extends DefaultNaming {
 	
 	@Override
 	public String getName(Mapping context, final String draftName) {
+
+		System.out.println("AAAAAAAAAARRRRRRRRRRRRRRR");
+
+
 		String name = super.getName(context, draftName);
 		if (name.startsWith("_")){
 			return "_" + name.replace("_", "");

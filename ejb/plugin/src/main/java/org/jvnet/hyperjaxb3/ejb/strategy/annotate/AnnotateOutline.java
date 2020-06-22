@@ -1,10 +1,12 @@
 package org.jvnet.hyperjaxb3.ejb.strategy.annotate;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.persistence.Transient;
-
+import com.sun.codemodel.JMethod;
+import com.sun.codemodel.JType;
+import com.sun.java.xml.ns.persistence.orm.*;
+import com.sun.tools.xjc.Options;
+import com.sun.tools.xjc.outline.ClassOutline;
+import com.sun.tools.xjc.outline.FieldOutline;
+import com.sun.tools.xjc.outline.Outline;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,17 +20,9 @@ import org.jvnet.jaxb2_commons.util.FieldAccessorUtils;
 import org.jvnet.jaxb2_commons.util.OutlineUtils;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.sun.codemodel.JMethod;
-import com.sun.codemodel.JType;
-import com.sun.java.xml.ns.persistence.orm.Attributes;
-import com.sun.java.xml.ns.persistence.orm.Embeddable;
-import com.sun.java.xml.ns.persistence.orm.EmbeddableAttributes;
-import com.sun.java.xml.ns.persistence.orm.Entity;
-import com.sun.java.xml.ns.persistence.orm.MappedSuperclass;
-import com.sun.tools.xjc.Options;
-import com.sun.tools.xjc.outline.ClassOutline;
-import com.sun.tools.xjc.outline.FieldOutline;
-import com.sun.tools.xjc.outline.Outline;
+import javax.persistence.Transient;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class AnnotateOutline implements OutlineProcessor<EjbPlugin> {
 
@@ -67,10 +61,7 @@ public class AnnotateOutline implements OutlineProcessor<EjbPlugin> {
 
 		final Object attributes;
 		final Collection<XAnnotation<?>> annotations;
-		if (entityOrMappedSuperclassOrEmbeddable instanceof Entity)
-
-		{
-
+		if (entityOrMappedSuperclassOrEmbeddable instanceof Entity) {
 			final Entity entity = (Entity) entityOrMappedSuperclassOrEmbeddable;
 
 			attributes = entity.getAttributes() == null ? new Attributes()
@@ -78,9 +69,7 @@ public class AnnotateOutline implements OutlineProcessor<EjbPlugin> {
 
 			annotations = context.getCreateXAnnotations()
 					.createEntityAnnotations(entity);
-		}
-
-		else if (entityOrMappedSuperclassOrEmbeddable instanceof MappedSuperclass) {
+		} else if (entityOrMappedSuperclassOrEmbeddable instanceof MappedSuperclass) {
 			final MappedSuperclass entity = (MappedSuperclass) entityOrMappedSuperclassOrEmbeddable;
 
 			attributes = entity.getAttributes() == null ? new Attributes()

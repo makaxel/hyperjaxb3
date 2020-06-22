@@ -74,6 +74,24 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring</artifactId>
 		</dependency>
+
+
+
+		<!-- https://mvnrepository.com/artifact/com.sun.codemodel/codemodel -->
+		<dependency>
+			<groupId>com.sun.codemodel</groupId>
+			<artifactId>codemodel</artifactId>
+			<version>2.6</version>
+		</dependency>
+
+
+
+
+
+
+
+
+
 	</dependencies>
 	<build>
 		<defaultGoal>install</defaultGoal>
