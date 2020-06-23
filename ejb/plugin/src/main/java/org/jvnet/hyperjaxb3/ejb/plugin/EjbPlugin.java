@@ -340,6 +340,20 @@ public class EjbPlugin extends AbstractSpringConfigurablePlugin {
 	@Override
 	public void postProcessModel(Model model, ErrorHandler errorHandler) {
 
+		logger.debug(" D in org.jvnet.hyperjaxb3.ejb.plugin.EjbPlugin.postProcessModel");
+
+		for (CClassInfo classInfo : model.beans().values()) {//for each class
+			logger.debug(" DDD classInfo.fullName = " + classInfo.fullName()  );
+			//DDD classInfo.fullName = iso.std.iso._20022.tech.xsd.camt_016_001_04.Document
+			// TODO: 23.06.2020 разобраться почему режет на 40 символов имя пакета, если явно в байндинге не указать
+			// https://github.com/highsource/maven-jaxb2-plugin/wiki/Configure-Target-Packages-in-Binding-Files
+
+			for (CPropertyInfo propertyInfo : classInfo.getProperties()) {//for each attribute
+				logger.debug(" DDD propertyInfo.getName(false) = " + propertyInfo.getName(false));
+//				propertyInfo.setName(false, Utility_StringHandling.firstCharacterToUpperCase(propertyInfo.getName(false)));
+			}
+		}
+
 		this.bgmBuilder = Ring.get(BGMBuilder.class);
 
 		if (LocalScoping.NESTED.equals(bgmBuilder.getGlobalBinding()
