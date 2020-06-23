@@ -1,7 +1,12 @@
 package org.jvnet.hyperjaxb3.ejb.strategy.mapping;
 
-import java.util.Collection;
-
+import com.sun.codemodel.JMethod;
+import com.sun.codemodel.JType;
+import com.sun.java.xml.ns.persistence.orm.*;
+import com.sun.tools.xjc.Options;
+import com.sun.tools.xjc.model.*;
+import com.sun.tools.xjc.outline.ClassOutline;
+import com.sun.tools.xjc.outline.FieldOutline;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jvnet.hyperjaxb3.codemodel.util.JTypeUtils;
@@ -10,29 +15,7 @@ import org.jvnet.hyperjaxb3.xjc.model.CTypeInfoUtils;
 import org.jvnet.jaxb2_commons.util.CustomizationUtils;
 import org.jvnet.jaxb2_commons.util.FieldAccessorUtils;
 
-import com.sun.codemodel.JMethod;
-import com.sun.codemodel.JType;
-import com.sun.java.xml.ns.persistence.orm.Attributes;
-import com.sun.java.xml.ns.persistence.orm.Basic;
-import com.sun.java.xml.ns.persistence.orm.ElementCollection;
-import com.sun.java.xml.ns.persistence.orm.Embedded;
-import com.sun.java.xml.ns.persistence.orm.EmbeddedId;
-import com.sun.java.xml.ns.persistence.orm.Id;
-import com.sun.java.xml.ns.persistence.orm.ManyToMany;
-import com.sun.java.xml.ns.persistence.orm.ManyToOne;
-import com.sun.java.xml.ns.persistence.orm.OneToMany;
-import com.sun.java.xml.ns.persistence.orm.OneToOne;
-import com.sun.java.xml.ns.persistence.orm.Transient;
-import com.sun.java.xml.ns.persistence.orm.Version;
-import com.sun.tools.xjc.Options;
-import com.sun.tools.xjc.model.CClass;
-import com.sun.tools.xjc.model.CClassInfo;
-import com.sun.tools.xjc.model.CEnumLeafInfo;
-import com.sun.tools.xjc.model.CPropertyInfo;
-import com.sun.tools.xjc.model.CTypeInfo;
-import  com.sun.tools.xjc.model.Aspect;
-import com.sun.tools.xjc.outline.ClassOutline;
-import com.sun.tools.xjc.outline.FieldOutline;
+import java.util.Collection;
 
 public class AttributesMapping implements ClassOutlineMapping<Attributes> {
 
@@ -40,6 +23,9 @@ public class AttributesMapping implements ClassOutlineMapping<Attributes> {
 
 	public Attributes process(Mapping context, ClassOutline classOutline,
 			Options options) {
+
+		logger.debug("7. in org.jvnet.hyperjaxb3.ejb.strategy.mapping.AttributesMapping.process");
+
 
 		final Attributes attributes = new Attributes();
 
@@ -112,14 +98,14 @@ public class AttributesMapping implements ClassOutlineMapping<Attributes> {
 
 			final CPropertyInfo propertyInfo = fieldOutline.getPropertyInfo();
 			if (!propertyInfo.isCollection()) {
-				logger.trace("Field outline  [" + propertyInfo.getName(true)
+				logger.debug("Field outline  [" + propertyInfo.getName(true)
 						+ "] is a single field.");
 
 				final Collection<? extends CTypeInfo> types = context
 						.getGetTypes().process(context, propertyInfo);
 
 				if (types.size() == 1) {
-					logger.trace("Field outline  ["
+					logger.debug("Field outline  ["
 							+ propertyInfo.getName(true)
 							+ "] is a homogeneous single field.");
 
@@ -128,16 +114,16 @@ public class AttributesMapping implements ClassOutlineMapping<Attributes> {
 					} else
 
 					if (isFieldOutlineComplex(context, fieldOutline)) {
-						logger.trace("Field outline  ["
+						logger.debug("Field outline  ["
 								+ propertyInfo.getName(true)
 								+ "] is a complex field.");
 						if (isFieldOutlineEmbeddedId(context, fieldOutline)) {
-							logger.trace("Field outline  ["
+							logger.debug("Field outline  ["
 									+ propertyInfo.getName(true)
 									+ "] is an embedded-id complex field.");
 							return context.getEmbeddedIdMapping();
 						} else if (isFieldOutlineEmbedded(context, fieldOutline)) {
-							logger.trace("Field outline  ["
+							logger.debug("Field outline  ["
 									+ propertyInfo.getName(true)
 									+ "] is an embedded complex field.");
 							return context.getEmbeddedMapping();
@@ -150,7 +136,7 @@ public class AttributesMapping implements ClassOutlineMapping<Attributes> {
 							+ "] is a heterogeneous single field.");
 				}
 			} else {
-				logger.trace("Field outline [" + propertyInfo.getName(true)
+				logger.debug("Field outline [" + propertyInfo.getName(true)
 						+ "] is a collection field.");
 
 				if (isFieldOutlineSingletypedHomogeneous(context, fieldOutline)) {

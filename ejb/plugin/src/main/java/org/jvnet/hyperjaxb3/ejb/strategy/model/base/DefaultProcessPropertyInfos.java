@@ -1,13 +1,6 @@
 package org.jvnet.hyperjaxb3.ejb.strategy.model.base;
 
-import java.text.MessageFormat;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-
-import javax.persistence.Embeddable;
-import javax.persistence.MappedSuperclass;
-
+import com.sun.tools.xjc.model.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jvnet.hyperjaxb3.ejb.schemas.customizations.Customizations;
@@ -17,13 +10,12 @@ import org.jvnet.hyperjaxb3.xjc.model.CClassifier;
 import org.jvnet.hyperjaxb3.xjc.model.CClassifyingVisitor;
 import org.jvnet.jaxb2_commons.util.CustomizationUtils;
 
-import com.sun.tools.xjc.model.CAttributePropertyInfo;
-import com.sun.tools.xjc.model.CClassInfo;
-import com.sun.tools.xjc.model.CClassRef;
-import com.sun.tools.xjc.model.CElementPropertyInfo;
-import com.sun.tools.xjc.model.CPropertyInfo;
-import com.sun.tools.xjc.model.CReferencePropertyInfo;
-import com.sun.tools.xjc.model.CValuePropertyInfo;
+import javax.persistence.Embeddable;
+import javax.persistence.MappedSuperclass;
+import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 
 public class DefaultProcessPropertyInfos implements ProcessPropertyInfos {
 
@@ -31,6 +23,8 @@ public class DefaultProcessPropertyInfos implements ProcessPropertyInfos {
 
 	public Collection<CPropertyInfo> process(ProcessModel context,
 			CClassInfo classInfo) {
+
+		logger.debug(" D in org.jvnet.hyperjaxb3.ejb.strategy.model.base.DefaultProcessPropertyInfos.process(org.jvnet.hyperjaxb3.ejb.strategy.model.ProcessModel, com.sun.tools.xjc.model.CClassInfo)");
 
 		logger.debug("Processing property infos for class info ["
 				+ classInfo.getName() + "].");

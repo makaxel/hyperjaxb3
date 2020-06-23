@@ -3,10 +3,12 @@
 	<groupId>org.jvnet.hyperjaxb3</groupId>
 	<artifactId>hyperjaxb3</artifactId>
 	<packaging>pom</packaging>
-	<version>0.6.3-SNAPSHOT</version>
+<!--	<version>0.6.3-SNAPSHOT</version>-->
+	<version>0.9-ISO20022-SNAPSHOT</version>
 	<name>Hyperjaxb3</name>
 	<url>https://github.com/highsource/hyperjaxb3</url>
-	<description>Hyperjaxb3 is an open source project which provides relational persistence for JAXB objects.</description>
+	<description>Hyperjaxb3 is an open source project which provides relational persistence for JAXB objects.
+					Modified(broken) version for processing special xsd-s with special requirements.</description>
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>

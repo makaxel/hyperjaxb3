@@ -1,41 +1,6 @@
 package org.jvnet.hyperjaxb3.ejb.plugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.XMLConstants;
-import javax.xml.namespace.QName;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.jvnet.hyperjaxb3.ejb.schemas.customizations.Customizations;
-import org.jvnet.hyperjaxb3.ejb.strategy.mapping.Mapping;
-import org.jvnet.hyperjaxb3.ejb.strategy.naming.Naming;
-import org.jvnet.hyperjaxb3.ejb.strategy.processor.ModelAndOutlineProcessor;
-import org.jvnet.hyperjaxb3.ejb.test.RoundtripTest;
-import org.jvnet.hyperjaxb3.xjc.generator.bean.field.UntypedListFieldRenderer;
-import org.jvnet.jaxb2_commons.plugin.spring.AbstractSpringConfigurablePlugin;
-import org.jvnet.jaxb2_commons.util.CustomizationUtils;
-import org.jvnet.jaxb2_commons.util.GeneratorContextUtils;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.w3c.dom.Element;
-import org.xml.sax.ErrorHandler;
-
-import com.sun.codemodel.JClass;
-import com.sun.codemodel.JCodeModel;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpr;
-import com.sun.codemodel.JMethod;
-import com.sun.codemodel.JMod;
+import com.sun.codemodel.*;
 import com.sun.tools.xjc.BadCommandLineException;
 import com.sun.tools.xjc.Options;
 import com.sun.tools.xjc.generator.bean.BeanGenerator;
@@ -52,6 +17,30 @@ import com.sun.tools.xjc.outline.Outline;
 import com.sun.tools.xjc.reader.Ring;
 import com.sun.tools.xjc.reader.xmlschema.BGMBuilder;
 import com.sun.tools.xjc.reader.xmlschema.bindinfo.LocalScoping;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.jvnet.hyperjaxb3.ejb.schemas.customizations.Customizations;
+import org.jvnet.hyperjaxb3.ejb.strategy.mapping.Mapping;
+import org.jvnet.hyperjaxb3.ejb.strategy.naming.Naming;
+import org.jvnet.hyperjaxb3.ejb.strategy.processor.ModelAndOutlineProcessor;
+import org.jvnet.hyperjaxb3.ejb.test.RoundtripTest;
+import org.jvnet.hyperjaxb3.xjc.generator.bean.field.UntypedListFieldRenderer;
+import org.jvnet.jaxb2_commons.plugin.spring.AbstractSpringConfigurablePlugin;
+import org.jvnet.jaxb2_commons.util.CustomizationUtils;
+import org.jvnet.jaxb2_commons.util.GeneratorContextUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.w3c.dom.Element;
+import org.xml.sax.ErrorHandler;
+
+import javax.xml.XMLConstants;
+import javax.xml.namespace.QName;
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Hyperjaxb3 EJB plugin.
@@ -63,6 +52,8 @@ public class EjbPlugin extends AbstractSpringConfigurablePlugin {
 
 	private final Method generateFieldDecl;
 	{
+		logger.debug(" D in org.jvnet.hyperjaxb3.ejb.plugin.EjbPlugin.generateFieldDecl");
+
 		try {
 			generateFieldDecl = BeanGenerator.class.getDeclaredMethod(
 					"generateFieldDecl", new Class[] { ClassOutlineImpl.class,
@@ -202,6 +193,8 @@ public class EjbPlugin extends AbstractSpringConfigurablePlugin {
 	@Override
 	public boolean run(Outline outline, Options options) throws Exception {
 
+		logger.debug(" D in org.jvnet.hyperjaxb3.ejb.plugin.EjbPlugin.run");
+
 		final Ring ring = Ring.begin();
 
 		try {
@@ -219,8 +212,13 @@ public class EjbPlugin extends AbstractSpringConfigurablePlugin {
 
 		}
 
+
+
 		for (final CClassInfo classInfo : getCreatedClasses()) {
 			final ClassOutline classOutline = outline.getClazz(classInfo);
+
+			logger.debug(" D in org.jvnet.hyperjaxb3.ejb.plugin.EjbPlugin.run classInfo.getType = " + classInfo.getType());
+
 			if (Customizations.isGenerated(classInfo)) {
 				generateClassBody(outline, (ClassOutlineImpl) classOutline);
 			}
@@ -331,6 +329,9 @@ public class EjbPlugin extends AbstractSpringConfigurablePlugin {
 	}
 
 	private QName getName(Element element) {
+
+		logger.debug(" D in org.jvnet.hyperjaxb3.ejb.plugin.EjbPlugin.getName");
+
 		return new QName(element.getNamespaceURI(), element.getLocalName(),
 				element.getPrefix() == null ? XMLConstants.DEFAULT_NS_PREFIX
 						: element.getPrefix());
@@ -386,6 +387,8 @@ public class EjbPlugin extends AbstractSpringConfigurablePlugin {
 
 	@Override
 	public void onActivated(Options options) throws BadCommandLineException {
+
+		logger.debug(" D in org.jvnet.hyperjaxb3.ejb.plugin.EjbPlugin.onActivated");
 
 		Thread.currentThread().setContextClassLoader(
 				getClass().getClassLoader());
@@ -525,9 +528,15 @@ public class EjbPlugin extends AbstractSpringConfigurablePlugin {
 
 	private void generateClassBody(Outline outline, ClassOutlineImpl cc) {
 
+		logger.debug(" D in org.jvnet.hyperjaxb3.ejb.plugin.EjbPlugin.generateClassBody");
+		System.out.println(" sout in org.jvnet.hyperjaxb3.ejb.plugin.EjbPlugin.generateClassBody ");
+
+
 		final JCodeModel codeModel = outline.getCodeModel();
 		final Model model = outline.getModel();
 		CClassInfo target = cc.target;
+
+		System.out.println(" sout in org.jvnet.hyperjaxb3.ejb.plugin.EjbPlugin.generateClassBody " + target.getTypeName().toString());
 
 		// if serialization support is turned on, generate
 		// [RESULT]
@@ -608,6 +617,8 @@ public class EjbPlugin extends AbstractSpringConfigurablePlugin {
 
 	private FieldOutline generateFieldDecl(Outline outline,
 			ClassOutlineImpl cc, CPropertyInfo prop) {
+
+		logger.debug(" D in org.jvnet.hyperjaxb3.ejb.plugin.EjbPlugin.generateFieldDecl");
 
 		try {
 			return (FieldOutline) generateFieldDecl.invoke(outline,

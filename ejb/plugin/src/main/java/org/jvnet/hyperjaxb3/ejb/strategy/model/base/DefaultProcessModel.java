@@ -1,33 +1,20 @@
 package org.jvnet.hyperjaxb3.ejb.strategy.model.base;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import com.sun.tools.xjc.Options;
+import com.sun.tools.xjc.model.CClassInfo;
+import com.sun.tools.xjc.model.CPropertyInfo;
+import com.sun.tools.xjc.model.Model;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jvnet.hyperjaxb3.ejb.plugin.EjbPlugin;
 import org.jvnet.hyperjaxb3.ejb.schemas.customizations.Customizations;
 import org.jvnet.hyperjaxb3.ejb.strategy.customizing.Customizing;
 import org.jvnet.hyperjaxb3.ejb.strategy.ignoring.Ignoring;
-import org.jvnet.hyperjaxb3.ejb.strategy.model.AdaptTypeUse;
-import org.jvnet.hyperjaxb3.ejb.strategy.model.ClassInfoProcessor;
-import org.jvnet.hyperjaxb3.ejb.strategy.model.CreateDefaultIdPropertyInfos;
-import org.jvnet.hyperjaxb3.ejb.strategy.model.CreatePropertyInfos;
-import org.jvnet.hyperjaxb3.ejb.strategy.model.GetTypes;
-import org.jvnet.hyperjaxb3.ejb.strategy.model.ProcessClassInfo;
-import org.jvnet.hyperjaxb3.ejb.strategy.model.ProcessModel;
-import org.jvnet.hyperjaxb3.ejb.strategy.model.ProcessPropertyInfos;
+import org.jvnet.hyperjaxb3.ejb.strategy.model.*;
 import org.jvnet.jaxb2_commons.util.CustomizationUtils;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.sun.tools.xjc.Options;
-import com.sun.tools.xjc.model.CClassInfo;
-import com.sun.tools.xjc.model.CPropertyInfo;
-import com.sun.tools.xjc.model.Model;
+import java.util.*;
 
 public class DefaultProcessModel implements ProcessModel {
 
@@ -39,6 +26,7 @@ public class DefaultProcessModel implements ProcessModel {
 		CustomizationUtils.findCustomization(model,
 				Customizations.PERSISTENCE_ELEMENT_NAME);
 
+		logger.debug(" D in org.jvnet.hyperjaxb3.ejb.strategy.model.base.DefaultProcessModel.process");
 		logger.debug("Processing model [...].");
 
 		final Collection<CClassInfo> unorderedClassInfos = model.beans().values();
@@ -52,6 +40,7 @@ public class DefaultProcessModel implements ProcessModel {
 						.process(this, classInfo);
 				if (targetClassInfos != null) {
 					for (final CClassInfo targetClassInfo : targetClassInfos) {
+						logger.debug(" targetClassInfo= " + targetClassInfo.getType());
 						includedClasses.add(targetClassInfo);
 						// model.beans().put(targetClassInfo.getClazz(),
 						// targetClassInfo);

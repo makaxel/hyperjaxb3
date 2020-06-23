@@ -1,18 +1,26 @@
 package org.jvnet.hyperjaxb3.ejb.jpa2.strategy.mapping;
 
-import org.jvnet.hyperjaxb3.ejb.strategy.mapping.ClassOutlineMapping;
-import org.jvnet.hyperjaxb3.ejb.strategy.mapping.Mapping;
-
 import com.sun.java.xml.ns.persistence.orm.Attributes;
 import com.sun.java.xml.ns.persistence.orm.EmbeddableAttributes;
 import com.sun.tools.xjc.Options;
 import com.sun.tools.xjc.outline.ClassOutline;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.jvnet.hyperjaxb3.ejb.strategy.mapping.ClassOutlineMapping;
+import org.jvnet.hyperjaxb3.ejb.strategy.mapping.EntityMapping;
+import org.jvnet.hyperjaxb3.ejb.strategy.mapping.Mapping;
 
 public class EmbeddableAttributesMapping implements
 		ClassOutlineMapping<EmbeddableAttributes> {
 
+	private static Log logger = LogFactory.getLog(EntityMapping.class);
+
 	public EmbeddableAttributes process(Mapping context,
 			ClassOutline classOutline, Options options) {
+
+
+		logger.debug("6. in org.jvnet.hyperjaxb3.ejb.jpa2.strategy.mapping.EmbeddableAttributesMapping.process");
+
 
 		final Attributes attributes = context.getAttributesMapping().process(
 				context, classOutline, options);
